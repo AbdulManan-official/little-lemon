@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+const LOGO_URI = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/little-lemon-logo.png';
+
 export const Avatar = ({ profile, size = 40 }) => {
   if (profile?.image) {
     return (
@@ -24,15 +26,15 @@ export default function Header({ profile, onBack, onProfile }) {
   return (
     <SafeAreaView edges={['top']} style={s.safe}>
       <View style={s.bar}>
-        <View style={{ width: 40, alignItems: 'flex-start' }}>
+        <View style={{ width: 44, alignItems: 'flex-start' }}>
           {onBack && (
             <Pressable onPress={onBack} style={s.back}>
               <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>←</Text>
             </Pressable>
           )}
         </View>
-        <Text style={s.logo}>🍋 LITTLE LEMON</Text>
-        <View style={{ width: 40, alignItems: 'flex-end' }}>
+        <Image source={{ uri: LOGO_URI }} style={s.logoImg} resizeMode="contain" />
+        <View style={{ width: 44, alignItems: 'flex-end' }}>
           {onProfile && (
             <Pressable onPress={onProfile}>
               <Avatar profile={profile} />
@@ -53,8 +55,13 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
-  logo: { fontWeight: 'bold', letterSpacing: 2, color: '#495E57', fontSize: 18 },
+  logoImg: {
+    width: 160,
+    height: 42,
+  },
   back: {
     width: 36,
     height: 36,

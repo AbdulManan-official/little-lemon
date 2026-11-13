@@ -14,7 +14,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from './Header';
 
 const API = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json';
-const img = (f) => `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${encodeURIComponent(f)}?raw=true`;
+
+// Resolves Meta repository image URLs and handles Meta's 'lemonDessert 2.jpg' typo
+const getDishImage = (imageName) => {
+  if (!imageName) return null;
+  const fileName = imageName === 'lemonDessert.jpg' ? 'lemonDessert 2.jpg' : imageName;
+  return `https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/images/${encodeURIComponent(fileName)}`;
+};
+
+const HERO_IMAGE_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/images/bruschetta.jpg';
 const CATEGORIES = ['starters', 'mains', 'desserts', 'drinks'];
 
 export default function Home({ navigation }) {
@@ -76,17 +84,21 @@ export default function Home({ navigation }) {
               We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
             </Text>
           </View>
-          <Image source={{ uri: img('Hero image.png') }} style={s.heroImg} resizeMode="cover" />
+          <Image source={{ uri: HERO_IMAGE_URL }} style={s.heroImg} resizeMode="cover" />
         </View>
-        <TextInput
-          style={s.search}
-          placeholder="Search dishes"
-          placeholderTextColor="#777"
-          value={query}
-          onChangeText={setQuery}
-          clearButtonMode="while-editing"
-        />
+        <View style={s.searchRow}>
+          <Text style={s.searchIcon}>🔍</Text>
+          <TextInput
+            style={s.search}
+            placeholder="Search dishes"
+            placeholderTextColor="#777"
+            value={query}
+            onChangeText={setQuery}
+            clearButtonMode="while-editing"
+          />
+        </View>
       </View>
+
       <Text style={s.delivery}>ORDER FOR DELIVERY!</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.cats}>
         {CATEGORIES.map((c) => {
@@ -128,7 +140,7 @@ export default function Home({ navigation }) {
                 <Text numberOfLines={2} style={s.desc}>{item.description}</Text>
                 <Text style={s.price}>${Number(item.price).toFixed(2)}</Text>
               </View>
-              <Image source={{ uri: img(item.image) }} style={s.dish} resizeMode="cover" />
+              <Image source={{ uri: getDishImage(item.image) }} style={s.dish} resizeMode="cover" />
             </View>
           )}
         />
@@ -143,12 +155,19 @@ const s = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
   city: { color: '#fff', fontSize: 22, fontWeight: '600' },
   about: { color: '#EDEFEE', fontSize: 14, marginTop: 8, lineHeight: 20 },
-  heroImg: { width: 100, height: 110, borderRadius: 12 },
-  search: {
+  heroImg: { width: 100, height: 110, borderRadius: 12, backgroundColor: '#333' },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#EDEFEE',
     borderRadius: 8,
-    padding: 10,
     marginTop: 14,
+    paddingHorizontal: 10,
+  },
+  searchIcon: { fontSize: 16, marginRight: 6 },
+  search: {
+    flex: 1,
+    paddingVertical: 10,
     fontSize: 16,
     color: '#333',
   },
@@ -168,6 +187,6 @@ const s = StyleSheet.create({
   name: { fontWeight: 'bold', fontSize: 17, color: '#333' },
   desc: { color: '#495E57', marginVertical: 4, fontSize: 14, lineHeight: 18 },
   price: { color: '#495E57', fontWeight: 'bold', fontSize: 16, marginTop: 2 },
-  dish: { width: 80, height: 80, borderRadius: 8, backgroundColor: '#f0f0f0' },
+  dish: { width: 80, height: 80, borderRadius: 8, backgroundColor: '#e0e0e0' },
   emptyText: { textAlign: 'center', margin: 30, color: '#777', fontSize: 16 },
 });
