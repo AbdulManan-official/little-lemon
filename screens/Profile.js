@@ -42,7 +42,7 @@ export default function Profile({ navigation }) {
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Sorry, we need camera roll permissions to upload an avatar.');
+      Alert.alert('Permission needed', 'Camera roll permission is required to upload an avatar.');
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -79,72 +79,76 @@ export default function Profile({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <Header profile={p} onBack={() => navigation.goBack()} />
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <Text style={s.h}>Personal information</Text>
+      <Header profile={p} onBack={() => navigation.goBack()} onProfile={() => {}} />
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }}>
+        <View style={s.card}>
+          <Text style={s.h}>Personal information</Text>
 
-        <Text style={s.small}>Avatar</Text>
-        <View style={s.avatarRow}>
-          <Avatar profile={p} size={80} />
-          <Pressable style={s.changeBtn} onPress={pickImage}>
-            <Text style={s.changeBtnText}>Change</Text>
-          </Pressable>
-          <Pressable style={s.removeBtn} onPress={removeImage}>
-            <Text style={s.removeBtnText}>Remove</Text>
-          </Pressable>
-        </View>
-
-        {[
-          ['firstName', 'First name *'],
-          ['lastName', 'Last name'],
-          ['email', 'Email *'],
-          ['phone', 'Phone number (10 digits)'],
-        ].map(([k, l]) => (
-          <View key={k}>
-            <Text style={s.small}>{l}</Text>
-            <TextInput
-              style={s.input}
-              value={p[k]}
-              onChangeText={(v) => set(k, v)}
-              keyboardType={k === 'phone' ? 'phone-pad' : k === 'email' ? 'email-address' : 'default'}
-              autoCapitalize={k === 'email' ? 'none' : 'words'}
-            />
+          <Text style={s.label}>Avatar</Text>
+          <View style={s.avatarRow}>
+            <Avatar profile={p} size={76} />
+            <Pressable style={s.changeBtn} onPress={pickImage}>
+              <Text style={s.changeBtnText}>Change</Text>
+            </Pressable>
+            <Pressable style={s.removeBtn} onPress={removeImage}>
+              <Text style={s.removeBtnText}>Remove</Text>
+            </Pressable>
           </View>
-        ))}
 
-        {!phoneOk && (
-          <Text style={s.errorText}>Phone number must be exactly 10 digits if provided</Text>
-        )}
-
-        <Text style={[s.h, { marginTop: 24 }]}>Email notifications</Text>
-        {NOTIFS.map(([k, l]) => (
-          <Pressable
-            key={k}
-            style={s.check}
-            onPress={() => set('notif', { ...p.notif, [k]: !p.notif?.[k] })}
-          >
-            <View style={[s.box, p.notif?.[k] && { backgroundColor: '#495E57' }]}>
-              {p.notif?.[k] && <Text style={{ color: '#fff', fontWeight: 'bold' }}>✓</Text>}
+          {[
+            ['firstName', 'First name'],
+            ['lastName', 'Last name'],
+            ['email', 'Email'],
+            ['phone', 'Phone number'],
+          ].map(([k, l]) => (
+            <View key={k}>
+              <Text style={s.label}>{l}</Text>
+              <TextInput
+                style={s.input}
+                value={p[k]}
+                onChangeText={(v) => set(k, v)}
+                placeholder={k === 'phone' ? '(217) 555-0113' : ''}
+                placeholderTextColor="#9CA3AF"
+                keyboardType={k === 'phone' ? 'phone-pad' : k === 'email' ? 'email-address' : 'default'}
+                autoCapitalize={k === 'email' ? 'none' : 'words'}
+              />
             </View>
-            <Text style={s.checkLabel}>{l}</Text>
-          </Pressable>
-        ))}
+          ))}
 
-        <Pressable style={s.logout} onPress={logout}>
-          <Text style={s.logoutText}>Log out</Text>
-        </Pressable>
+          {!phoneOk && (
+            <Text style={s.errorText}>Phone number must be exactly 10 digits if provided</Text>
+          )}
 
-        <View style={s.btns}>
-          <Pressable style={s.discard} onPress={discard}>
-            <Text style={{ color: '#495E57', fontWeight: 'bold', fontSize: 16 }}>Discard changes</Text>
+          <Text style={[s.h, { marginTop: 24 }]}>Email notifications</Text>
+          {NOTIFS.map(([k, l]) => (
+            <Pressable
+              key={k}
+              style={s.check}
+              onPress={() => set('notif', { ...p.notif, [k]: !p.notif?.[k] })}
+            >
+              <View style={[s.box, p.notif?.[k] && { backgroundColor: '#495E57' }]}>
+                {p.notif?.[k] && <Text style={{ color: '#fff', fontWeight: 'bold' }}>✓</Text>}
+              </View>
+              <Text style={s.checkLabel}>{l}</Text>
+            </Pressable>
+          ))}
+
+          <Pressable style={s.logout} onPress={logout}>
+            <Text style={s.logoutText}>Log out</Text>
           </Pressable>
-          <Pressable
-            disabled={!phoneOk}
-            style={[s.save, !phoneOk && { backgroundColor: '#aaa' }]}
-            onPress={save}
-          >
-            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Save changes</Text>
-          </Pressable>
+
+          <View style={s.btns}>
+            <Pressable style={s.discard} onPress={discard}>
+              <Text style={s.discardText}>Discard changes</Text>
+            </Pressable>
+            <Pressable
+              disabled={!phoneOk}
+              style={[s.save, !phoneOk && { backgroundColor: '#aaa' }]}
+              onPress={save}
+            >
+              <Text style={s.saveText}>Save changes</Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -152,77 +156,136 @@ export default function Profile({ navigation }) {
 }
 
 const s = StyleSheet.create({
-  h: { fontSize: 20, fontWeight: 'bold', color: '#333', marginBottom: 6 },
-  small: { fontSize: 14, color: '#495E57', fontWeight: '600', marginTop: 14, marginBottom: 4 },
-  avatarRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 8 },
+  card: {
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 16,
+    padding: 18,
+    backgroundColor: '#fff',
+  },
+  h: {
+    fontSize: 19,
+    fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 6,
+  },
+  label: {
+    fontSize: 13,
+    color: '#6B7280',
+    fontWeight: '500',
+    marginTop: 14,
+    marginBottom: 6,
+  },
+  avatarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
   changeBtn: {
     backgroundColor: '#495E57',
-    paddingVertical: 10,
-    paddingHorizontal: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 22,
     borderRadius: 8,
-    marginLeft: 16,
+    marginLeft: 18,
   },
-  changeBtnText: { color: '#fff', fontWeight: 'bold' },
+  changeBtnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
   removeBtn: {
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#495E57',
-    paddingVertical: 10,
-    paddingHorizontal: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 22,
     borderRadius: 8,
-    marginLeft: 12,
+    marginLeft: 14,
   },
-  removeBtnText: { color: '#495E57', fontWeight: 'bold' },
+  removeBtnText: {
+    color: '#495E57',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#D1D5DB',
     borderRadius: 8,
-    padding: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
     fontSize: 16,
-    backgroundColor: '#EDEFEE',
+    color: '#1F2937',
+    backgroundColor: '#fff',
   },
-  errorText: { color: '#d9534f', marginTop: 6, fontSize: 13 },
-  check: { flexDirection: 'row', alignItems: 'center', marginVertical: 8 },
+  errorText: {
+    color: '#EF4444',
+    marginTop: 6,
+    fontSize: 13,
+  },
+  check: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 8,
+  },
   box: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
+    width: 22,
+    height: 22,
+    borderRadius: 5,
     borderWidth: 2,
     borderColor: '#495E57',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkLabel: { marginLeft: 12, fontSize: 15, color: '#333' },
+  checkLabel: {
+    marginLeft: 12,
+    fontSize: 15,
+    color: '#374151',
+  },
   logout: {
     backgroundColor: '#F4CE14',
     borderRadius: 8,
-    padding: 14,
+    paddingVertical: 14,
     alignItems: 'center',
     marginTop: 26,
     borderWidth: 1,
-    borderColor: '#EE9972',
+    borderColor: '#EAB308',
   },
-  logoutText: { fontWeight: 'bold', fontSize: 16, color: '#333' },
+  logoutText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#1F2937',
+  },
   btns: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    marginBottom: 40,
   },
   discard: {
     flex: 1,
     borderWidth: 1,
     borderColor: '#495E57',
     borderRadius: 8,
-    padding: 12,
+    paddingVertical: 12,
     alignItems: 'center',
     marginRight: 8,
+    backgroundColor: '#fff',
+  },
+  discardText: {
+    color: '#495E57',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   save: {
     flex: 1,
     backgroundColor: '#495E57',
     borderRadius: 8,
-    padding: 12,
+    paddingVertical: 12,
     alignItems: 'center',
     marginLeft: 8,
+  },
+  saveText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 });

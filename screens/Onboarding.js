@@ -13,8 +13,6 @@ import {
 import { AuthContext } from '../AuthContext';
 import Header from './Header';
 
-const HERO_IMAGE_URL = 'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/images/bruschetta.jpg';
-
 const validName = (n) => /^[A-Za-z ]+$/.test(n.trim());
 const validEmail = (e) => /^\S+@\S+\.\S+$/.test(e.trim());
 
@@ -26,32 +24,35 @@ export default function Onboarding() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: '#fff' }}
+      style={{ flex: 1, backgroundColor: '#EDEFEE' }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <Header />
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <View style={s.hero}>
-          <Text style={s.heroTitle}>Little Lemon</Text>
-          <View style={s.heroRow}>
+          <Text style={s.title}>Little Lemon</Text>
+          <View style={s.row}>
             <View style={{ flex: 1, paddingRight: 10 }}>
-              <Text style={s.heroCity}>Chicago</Text>
-              <Text style={s.heroAbout}>
+              <Text style={s.city}>Chicago</Text>
+              <Text style={s.about}>
                 We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.
               </Text>
             </View>
-            <Image source={{ uri: HERO_IMAGE_URL }} style={s.heroImg} resizeMode="cover" />
+            <Image
+              source={require('../assets/images/hero.png')}
+              style={s.heroImg}
+              resizeMode="cover"
+            />
           </View>
         </View>
 
         <View style={s.form}>
-          <Text style={s.formHeading}>Let us get to know you</Text>
           <Text style={s.label}>First Name *</Text>
           <TextInput
             style={s.input}
             value={firstName}
             onChangeText={setFirstName}
-            placeholder="Tilly"
+            placeholder="tilly"
             placeholderTextColor="#888"
           />
           <Text style={s.label}>Email *</Text>
@@ -91,30 +92,29 @@ export default function Onboarding() {
 
 const s = StyleSheet.create({
   hero: { backgroundColor: '#495E57', padding: 20 },
-  heroTitle: { color: '#F4CE14', fontSize: 36, fontWeight: 'bold' },
-  heroRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-  heroCity: { color: '#fff', fontSize: 22, fontWeight: '600' },
-  heroAbout: { color: '#EDEFEE', fontSize: 14, marginTop: 8, lineHeight: 20 },
+  title: { color: '#F4CE14', fontSize: 36, fontWeight: 'bold' },
+  row: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  city: { color: '#fff', fontSize: 22, fontWeight: '600' },
+  about: { color: '#EDEFEE', fontSize: 14, marginTop: 8, lineHeight: 20 },
   heroImg: { width: 100, height: 110, borderRadius: 12 },
-  form: { flex: 1, paddingHorizontal: 24, paddingTop: 20 },
-  formHeading: { fontSize: 20, fontWeight: 'bold', color: '#495E57', marginBottom: 12 },
-  label: { fontSize: 16, color: '#495E57', fontWeight: 'bold', marginTop: 12 },
+  form: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
+  label: { fontSize: 16, color: '#333', fontWeight: 'bold', marginTop: 14 },
   input: {
-    borderWidth: 1.5,
-    borderColor: '#495E57',
+    borderWidth: 1,
+    borderColor: '#bbb',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#EDEFEE',
+    backgroundColor: '#fff',
     marginTop: 6,
   },
-  footer: { padding: 24, alignItems: 'flex-end' },
+  footer: { padding: 20, alignItems: 'flex-end' },
   btn: {
     backgroundColor: '#495E57',
     borderRadius: 8,
     paddingVertical: 12,
-    paddingHorizontal: 40,
+    paddingHorizontal: 36,
   },
   btnOff: { backgroundColor: '#aaa' },
-  btnText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  btnText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
 });
