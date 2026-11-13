@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import { AuthContext } from '../App';
+import { AuthContext } from '../AuthContext';
 import Header from './Header';
 
 const validName = (n) => /^[A-Za-z ]+$/.test(n.trim());

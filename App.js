@@ -4,12 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthContext } from './AuthContext';
 import Onboarding from './screens/Onboarding';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator();
-export const AuthContext = React.createContext();
 
 export default function App() {
   const [loading, setLoading] = useState(true);

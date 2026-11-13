@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
-import { AuthContext } from '../App';
+import { AuthContext } from '../AuthContext';
 import Header, { Avatar } from './Header';
 
 const NOTIFS = [
